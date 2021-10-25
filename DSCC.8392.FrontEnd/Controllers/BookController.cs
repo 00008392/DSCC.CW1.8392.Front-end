@@ -25,9 +25,7 @@ namespace DSCC._8392.FrontEnd.Controllers
 
             if (response.IsSuccessStatusCode)
             {
-                var responseStr = await response.Content.ReadAsStringAsync();
-
-                books = JsonConvert.DeserializeObject<List<Book>>(responseStr);
+                books = await ReadResponse<List<Book>>(response);
             }
             return View(books);
         }
@@ -35,16 +33,8 @@ namespace DSCC._8392.FrontEnd.Controllers
         // GET: Book/Details/5
         public async Task<ActionResult> Details(int id)
         {
-            Book book = null;
-            HttpResponseMessage response = await _httpClient.GetAsync("api/books/" + id);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var responseStr = await response.Content.ReadAsStringAsync();
-
-                book = JsonConvert.DeserializeObject<Book>(responseStr);
-            }
-            else
+            Book book = await GetBook(id);
+           if(book == null)
             {
                 return RedirectToAction("Index");
             }
@@ -55,18 +45,9 @@ namespace DSCC._8392.FrontEnd.Controllers
         // GET: Book/Create
         public async Task<ActionResult> Create()
         {
-            List<Genre> genres = new List<Genre>();
-
-            HttpResponseMessage response = await _httpClient.GetAsync("api/genres/");
-
-            if (response.IsSuccessStatusCode)
-            {
-                var responseStr = await response.Content.ReadAsStringAsync();
-
-                genres = JsonConvert.DeserializeObject<List<Genre>>(responseStr);
-            }
+          
             var bookViewModel = new Book();
-            bookViewModel.Genres = new SelectList(genres, "Id","Title");
+            bookViewModel.Genres = await PrepareSelectListData();
             return View(bookViewModel);
         }
 
@@ -94,30 +75,12 @@ namespace DSCC._8392.FrontEnd.Controllers
         // GET: Book/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
-            Book book = null;
-            HttpResponseMessage response = await _httpClient.GetAsync("api/books/" + id);
-            List<Genre> genres = new List<Genre>();
-
-            HttpResponseMessage genreResponse = await _httpClient.GetAsync("api/genres");
-
-            if (genreResponse.IsSuccessStatusCode)
-            {
-                var genreResponseStr = await genreResponse.Content.ReadAsStringAsync();
-
-                genres = JsonConvert.DeserializeObject<List<Genre>>(genreResponseStr);
-            }
-            if (response.IsSuccessStatusCode)
-            {
-                var responseStr = await response.Content.ReadAsStringAsync();
-
-                book = JsonConvert.DeserializeObject<Book>(responseStr);
-                book.Genres = new SelectList(genres, "Id","Title");
-            }
-            else
+            Book book = await GetBook(id);
+            if(book==null)
             {
                 return RedirectToAction("Index");
             }
-
+            book.Genres = await PrepareSelectListData();
             return View(book);
         }
 
@@ -145,16 +108,8 @@ namespace DSCC._8392.FrontEnd.Controllers
         // GET: Book/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
-            Book book = null;
-            HttpResponseMessage response = await _httpClient.GetAsync("api/books/" + id);
-
-            if (response.IsSuccessStatusCode)
-            {
-                var responseStr = await response.Content.ReadAsStringAsync();
-
-                book = JsonConvert.DeserializeObject<Book>(responseStr);
-            }
-            else
+            Book book = await GetBook(id);
+            if (book == null)
             {
                 return RedirectToAction("Index");
             }
@@ -182,6 +137,37 @@ namespace DSCC._8392.FrontEnd.Controllers
                 book.ErrorMessage = "Something went wrong";
                 return View(book);
             }
+        }
+        private async Task<SelectList> PrepareSelectListData()
+        {
+            List<Genre> genres = new List<Genre>();
+
+            HttpResponseMessage genreResponse = await _httpClient.GetAsync("api/books/genres");
+
+            if (genreResponse.IsSuccessStatusCode)
+            {
+                var genreResponseStr = await genreResponse.Content.ReadAsStringAsync();
+
+                genres = JsonConvert.DeserializeObject<List<Genre>>(genreResponseStr);
+            }
+            return new SelectList(genres, "Id", "Title");
+        }
+        private async Task<T> ReadResponse<T>(HttpResponseMessage message)
+        {
+            var responseStr = await message.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<T>(responseStr);
+        }
+        private async Task<Book> GetBook(int id)
+        {
+            Book book = null;
+            HttpResponseMessage response = await _httpClient.GetAsync("api/books/" + id);
+
+            if (response.IsSuccessStatusCode)
+            {
+                book = await ReadResponse<Book>(response);
+            }
+            return book;
         }
     }
 }
