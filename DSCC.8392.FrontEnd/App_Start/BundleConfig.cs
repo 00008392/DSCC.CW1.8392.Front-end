@@ -21,7 +21,7 @@ namespace DSCC._8392.FrontEnd
 
             bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js"));
-
+            //adding custom bootstrap theme
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap-custom.css",
                       "~/Content/site.css"));

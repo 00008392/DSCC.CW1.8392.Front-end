@@ -14,11 +14,13 @@ namespace DSCC._8392.FrontEnd.Controllers
     {
         private readonly HttpClient _httpClient = new HttpClient()
         {
-            BaseAddress = new Uri("http://localhost:14829/")
+            //URL to access microservice API
+            BaseAddress = new Uri("http://ec2-3-91-54-154.compute-1.amazonaws.com/")
         };
         // GET: Book
         public async Task<ActionResult> Index()
         {
+            //get all books
             List<Book> books = new List<Book>();
 
             HttpResponseMessage response = await _httpClient.GetAsync("api/books");
@@ -33,6 +35,7 @@ namespace DSCC._8392.FrontEnd.Controllers
         // GET: Book/Details/5
         public async Task<ActionResult> Details(int id)
         {
+            //get particular book
             Book book = await GetBook(id);
            if(book == null)
             {
@@ -47,6 +50,7 @@ namespace DSCC._8392.FrontEnd.Controllers
         {
           
             var bookViewModel = new Book();
+            //populate dropdown menu with book genres
             bookViewModel.Genres = await PrepareSelectListData();
             return View(bookViewModel);
         }
@@ -55,6 +59,7 @@ namespace DSCC._8392.FrontEnd.Controllers
         [HttpPost]
         public async Task<ActionResult> Create(Book book)
         {
+            //create book
             try
             {
                 var result = await _httpClient.PostAsJsonAsync("api/books/", book);
@@ -75,11 +80,13 @@ namespace DSCC._8392.FrontEnd.Controllers
         // GET: Book/Edit/5
         public async Task<ActionResult> Edit(int id)
         {
+            //show book info in edit form 
             Book book = await GetBook(id);
             if(book==null)
             {
                 return RedirectToAction("Index");
             }
+            //populate dropdown menu with books
             book.Genres = await PrepareSelectListData();
             return View(book);
         }
@@ -88,6 +95,7 @@ namespace DSCC._8392.FrontEnd.Controllers
         [HttpPost]
         public async Task<ActionResult> Edit(int id, Book book)
         {
+            //edit particular book
             try
             {
                 var result = await _httpClient.PutAsJsonAsync("api/books/" + book.Id, book);
@@ -108,6 +116,7 @@ namespace DSCC._8392.FrontEnd.Controllers
         // GET: Book/Delete/5
         public async Task<ActionResult> Delete(int id)
         {
+            //show info about book to delete
             Book book = await GetBook(id);
             if (book == null)
             {
@@ -121,6 +130,7 @@ namespace DSCC._8392.FrontEnd.Controllers
         [HttpPost]
         public async Task<ActionResult> Delete(int id, Book book)
         {
+            //delete particular book
             try
             {
 
@@ -138,10 +148,11 @@ namespace DSCC._8392.FrontEnd.Controllers
                 return View(book);
             }
         }
+        //method for populating dropdown with genres
         private async Task<SelectList> PrepareSelectListData()
         {
             List<Genre> genres = new List<Genre>();
-
+            //get all genres
             HttpResponseMessage genreResponse = await _httpClient.GetAsync("api/books/genres");
 
             if (genreResponse.IsSuccessStatusCode)
@@ -150,14 +161,17 @@ namespace DSCC._8392.FrontEnd.Controllers
 
                 genres = JsonConvert.DeserializeObject<List<Genre>>(genreResponseStr);
             }
+            //put genres in select list
             return new SelectList(genres, "Id", "Title");
         }
+        //reading http response is in separate method in order to avoid repetitive code
         private async Task<T> ReadResponse<T>(HttpResponseMessage message)
         {
             var responseStr = await message.Content.ReadAsStringAsync();
 
             return JsonConvert.DeserializeObject<T>(responseStr);
         }
+        //method for getting particular book is in separate method to avoid repetitive code
         private async Task<Book> GetBook(int id)
         {
             Book book = null;

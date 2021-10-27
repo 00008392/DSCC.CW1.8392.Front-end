@@ -22,7 +22,9 @@ namespace DSCC._8392.FrontEnd.Models
         public Genre Genre { get; set; }
         public string Publisher { get; set; }
         public string ISBN { get; set; }
+        //when creating/editing book, dropdown for choosing genre is needed
         public SelectList Genres { get; set; }
+        //in case of exception from server side
         public string ErrorMessage { get; set; }
     }
 }
