@@ -1,0 +1,20 @@
+version: 0.0
+os: windows
+files:
+  - source: \
+    destination: c:\inetpub\wwwroot\8392DSCC
+  - source: \scripts\deletewebsite.ps1
+    destination: c:\temp
+  - source: \scripts\installwebsite.ps1
+    destination: c:\temp
+  - source: \scripts\deletewebsite.bat
+    destination: c:\temp
+  - source: \scripts\installwebsite.bat
+    destination: c:\temp
+hooks:
+  BeforeInstall:
+    - location: \scripts\deletewebsite.bat
+      timeout: 180
+  AfterInstall:
+    - location: \scripts\installwebsite.bat
+      timeout: 180
