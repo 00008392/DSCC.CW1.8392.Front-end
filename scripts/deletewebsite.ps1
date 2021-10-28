@@ -20,3 +20,4 @@ if (!(Test-Path $iisAppPoolName -pathType container))
 {
 	Remove-WebAppPool $iisAppPoolName
 }
+
