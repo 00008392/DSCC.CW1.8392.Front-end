@@ -5,6 +5,19 @@ VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DSCC.8392.FrontEnd", "DSCC.8392.FrontEnd\DSCC.8392.FrontEnd.csproj", "{509D535B-3C39-49C0-A9D9-AFD07CCE9C88}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{C9943B26-E5B3-4DE3-ADD5-1B10A859C019}"
+	ProjectSection(SolutionItems) = preProject
+		appspec.yml = appspec.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "scripts", "scripts", "{14CA6F3B-4F09-4EE6-A6F6-C811258C34BE}"
+	ProjectSection(SolutionItems) = preProject
+		scripts\deletewebsite.bat = scripts\deletewebsite.bat
+		scripts\deletewebsite.ps1 = scripts\deletewebsite.ps1
+		scripts\installwebsite.bat = scripts\installwebsite.bat
+		scripts\installwebsite.ps1 = scripts\installwebsite.ps1
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

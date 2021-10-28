@@ -15,7 +15,7 @@ namespace DSCC._8392.FrontEnd.Controllers
         private readonly HttpClient _httpClient = new HttpClient()
         {
             //URL to access microservice API
-            BaseAddress = new Uri("http://ec2-3-91-54-154.compute-1.amazonaws.com/")
+            BaseAddress = new Uri("http://ec2-107-23-250-116.compute-1.amazonaws.com/")
         };
         // GET: Book
         public async Task<ActionResult> Index()
