@@ -1,8 +1,8 @@
 version: 0.0
 os: windows
 files:
-  - source: \
-    destination: c:\inetpub\wwwroot\8392DSCC
+  - source: \publish_output
+    destination: c:\inetpub\wwwroot\8392DSCC\DSCC.8392.FrontEnd
   - source: \scripts\deletewebsite.ps1
     destination: c:\temp
   - source: \scripts\installwebsite.ps1
@@ -11,6 +11,8 @@ files:
     destination: c:\temp
   - source: \scripts\installwebsite.bat
     destination: c:\temp
+  - source: \appspec.yml
+    destination: c:\inetpub\wwwroot\8392DSCC
 hooks:
   BeforeInstall:
     - location: \scripts\deletewebsite.bat

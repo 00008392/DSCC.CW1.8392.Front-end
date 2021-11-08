@@ -8,3 +8,4 @@ IF EXIST c:\temp\deletewebsite.ps1 %SystemRoot%\sysnative\WindowsPowerShell\v1.0
 %SystemRoot%\sysnative\WindowsPowerShell\v1.0\powershell.exe -command "rm c:\inetpub\wwwroot\8392DSCC -Recurse -Force"
 del /q "c:\temp\*.*"
 
+
